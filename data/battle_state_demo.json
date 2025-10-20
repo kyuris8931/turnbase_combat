@@ -1,0 +1,549 @@
+{
+    "battleState": "Ongoing",
+    "round": 1,
+    "turnInRound": 1,
+    "activeUnitID": "player_kyuris_01_mock",
+    "activeUnitType": "Ally",
+    "battleMessage": "DEMO: The fierce battle begins!",
+    "teamSP": 5,
+    "maxTeamSP": 10,
+    "assets": {
+        "backgroundImageFilename": "backgrounds/mock_battle_bg.png",
+        "sfx": {}
+    },
+    "units": [
+        {
+            "id": "player_kyuris_01_mock",
+            "name": "Kyuris (Demo)",
+            "type": "Ally",
+            "role": "Melee",
+            "status": "Active",
+            "pseudoPos": 0,
+            "portraitFilename": "heroes/Kyuris_Portrait.png",
+            "fullBodyFilename": "heroes/Kyuris_Full.png",
+            "stats": {
+                "level": 1,
+                "hp": 62,
+                "maxHp": 62,
+                "atk": 11,
+                "def": 5,
+                "gauge": 0,
+                "maxGauge": 100,
+                "shieldHP": 0
+            },
+            "commands": [
+                {
+                    "commandId": "ky_healing_touch",
+                    "name": "Healing Touch (1)",
+                    "description": "Heals a single ally (1.5x ATK).",
+                    "type": "Skill",
+                    "spCost": 1,
+                    "sfxFilename": "sfx_heal_single.mp3",
+                    "targetingParams": {
+                        "selection": {
+                            "targetableTypes": ["Ally"],
+                            "pattern": {
+                                "shape": "WithinDistance",
+                                "distance": 2,
+                                "direction": "Both"
+                            }
+                        },
+                        "area": {
+                            "origin": "SelectedTarget",
+                            "shape": "SingleOnSelected",
+                            "affectedTypes": ["Ally"]
+                        }
+                    },
+                    "effects": [
+                        {
+                            "type": "heal",
+                            "multiplier": 2,
+                            "basedOn": "caster_atk",
+                            "target": "selected"
+                        }
+                    ]
+                },
+                {
+                    "commandId": "ky_divine_blessing",
+                    "name": "Divine Blessing (4)",
+                    "description": "Heals allies in an area (2.5x ATK).",
+                    "type": "Skill",
+                    "spCost": 4,
+                    "sfxFilename": "sfx_heal_area.mp3",
+                    "targetingParams": {
+                        "selection": {
+                            "targetableTypes": ["Self"],
+                            "pattern": {
+                                "shape": "Self"
+                            }
+                        },
+                        "area": {
+                            "origin": "Caster",
+                            "shape": "RadiusAroundOrigin",
+                            "distance": 2,
+                            "affectedTypes": ["Ally"]
+                        }
+                    },
+                    "effects": [
+                        {
+                            "type": "heal",
+                            "multiplier": 2,
+                            "basedOn": "caster_atk",
+                            "target": "area"
+                        }
+                    ]
+                },
+                {
+                    "commandId": "ky_soul_revival",
+                    "name": "Soul Revival (7)",
+                    "description": "Revives an ally (50% MaxHP).",
+                    "type": "Skill",
+                    "sfxFilename": "sfx_revive.mp3",
+                    "spCost": 7,
+                    "targetingParams": {
+                        "selection": {
+                            "targetableTypes": ["Ally"],
+                            "pattern": {
+                                "shape": "AnyDefeatedAlly"
+                            }
+                        },
+                        "area": {
+                            "origin": "SelectedTarget",
+                            "shape": "SingleOnSelected",
+                            "affectedTypes": ["Ally"]
+                        }
+                    },
+                    "effects": [
+                        {
+                            "type": "revive",
+                            "hpPercentage": 0.50,
+                            "target": "selected"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "hero_arthur_01_mock",
+            "name": "Arthur (Demo)",
+            "type": "Ally",
+            "role": "Melee",
+            "status": "Idle",
+            "pseudoPos": 1,
+            "portraitFilename": "heroes/Arthur_Portrait.png",
+            "fullBodyFilename": "heroes/Arthur_Full.png",
+            "stats": {
+                "level": 1,
+                "hp": 60,
+                "maxHp": 60,
+                "atk": 10,
+                "def": 6,
+                "gauge": 0,
+                "maxGauge": 100,
+                "shieldHP": 0
+            },
+            "commands": [
+                {
+                    "commandId": "ar_blade_rush",
+                    "name": "Blade Rush (2)",
+                    "description": "Advance 1 position (0.75x ATK), act again.",
+                    "type": "Skill",
+                    "spCost": 2,
+                    "sfxFilename": "sfx_blade_rush.mp3",
+                    "targetingParams": {
+                        "selection": {
+                            "targetableTypes": ["Enemy"],
+                            "pattern": {
+                                "shape": "SpecificPosition",
+                                "distance": 1,
+                                "direction": "Forward"
+                            }
+                        },
+                        "area": {
+                            "origin": "SelectedTarget",
+                            "shape": "SingleOnSelected",
+                            "affectedTypes": ["Enemy"]
+                        }
+                    },
+                    "effects": [
+                        {
+                            "type": "damage",
+                            "multiplier": 0.75,
+                            "target": "selected"
+                        },
+                        {
+                            "type": "act_again"
+                        }
+                    ]
+                },
+                {
+                    "commandId": "ar_shield_blast",
+                    "name": "Shield Blast (4)",
+                    "description": "Deals AoE damage (1x ATK), grants self shield (2.5x ATK).",
+                    "type": "Skill",
+                    "spCost": 4,
+                    "sfxFilename": "sfx_shield_blast.mp3",
+                    "targetingParams": {
+                        "selection": {
+                            "targetableTypes": ["Self"],
+                            "pattern": {
+                                "shape": "Self"
+                            }
+                        }
+                    },
+                    "effects": [
+                        {
+                            "type": "damage_aoe_adjacent",
+                            "multiplier": 1,
+                            "target": "caster_adjacent_enemies"
+                        },
+                        {
+                            "type": "shield",
+                            "multiplier": 2.5,
+                            "basedOn": "caster_atk",
+                            "target": "caster"
+                        }
+                    ]
+                },
+                {
+                    "commandId": "ar_excalibur_strike",
+                    "name": "Excalibur Strike (7)",
+                    "description": "Deals melee damage (3x ATK), 100% chance to stun.",
+                    "type": "Skill",
+                    "spCost": 7,
+                    "sfxFilename": "sfx_excalibur_strike.mp3",
+                    "targetingParams": {
+                        "selection": {
+                            "targetableTypes": ["Enemy"],
+                            "pattern": {
+                                "shape": "Adjacent",
+                                "distance": 1,
+                                "direction": "Both"
+                            }
+                        },
+                        "area": {
+                            "origin": "SelectedTarget",
+                            "shape": "SingleOnSelected",
+                            "affectedTypes": ["Enemy"]
+                        }
+                    },
+                    "effects": [
+                        {
+                            "type": "damage",
+                            "multiplier": 3,
+                            "target": "selected"
+                        },
+                        {
+                            "type": "status",
+                            "statusName": "Stun",
+                            "chance": 1.0,
+                            "duration": 1,
+                            "target": "selected"
+                        }
+                    ]
+                },
+                {
+                    "commandId": "ar_ultimate_final_bastion",
+                    "name": "Final Bastion (ULT)",
+                    "description": "Deals massive AoE damage (4x ATK) to all enemies within 2 spaces.",
+                    "type": "Skill",
+                    "isUltimate": true,
+                    "gaugeCost": 100,
+                    "spCost": 0,
+                    "sfxFilename": "sfx_ultimate_powerful.mp3",
+                    "targetingParams": {
+                        "selection": {
+                            "targetableTypes": ["Self"],
+                            "pattern": { "shape": "Self" }
+                        },
+                        "area": {
+                            "origin": "Caster",
+                            "shape": "RadiusAroundOrigin",
+                            "distance": 2,
+                            "affectedTypes": ["Enemy"]
+                        }
+                    },
+                    "effects": [
+                        {
+                            "type": "damage",
+                            "multiplier": 4.0,
+                            "target": "area"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "hero_robin_01_mock",
+            "name": "Robin (Demo)",
+            "type": "Ally",
+            "role": "Ranged",
+            "status": "Idle",
+            "pseudoPos": 2,
+            "portraitFilename": "heroes/Robin_Portrait.png",
+            "fullBodyFilename": "heroes/Robin_Full.png",
+            "stats": {
+                "level": 1,
+                "hp": 55,
+                "maxHp": 55,
+                "atk": 12,
+                "def": 4,
+                "gauge": 0,
+                "maxGauge": 100,
+                "shieldHP": 0
+            },
+            "commands": [
+                {
+                    "commandId": "rh_arrow_storm",
+                    "name": "Arrow Storm (1)",
+                    "description": "Deals AoE damage (0.8x ATK).",
+                    "type": "Skill",
+                    "spCost": 1,
+                    "sfxFilename": "sfx_arrow_storm.mp3",
+                    "targetingParams": {
+                        "selection": {
+                            "targetableTypes": ["Enemy"],
+                            "pattern": {
+                                "shape": "WithinDistance",
+                                "distance": 2,
+                                "direction": "Both"
+                            }
+                        },
+                        "area": {
+                            "origin": "SelectedTarget",
+                            "shape": "RadiusAroundOrigin",
+                            "distance": 1,
+                            "affectedTypes": ["Enemy"]
+                        }
+                    },
+                    "effects": [
+                        {
+                            "type": "damage",
+                            "multiplier": 0.8,
+                            "target": "area"
+                        }
+                    ]
+                },
+                {
+                    "commandId": "rh_charity_shot",
+                    "name": "Charity Shot (4)",
+                    "description": "Deals damage (2x ATK), heals lowest HP ally (2x ATK).",
+                    "type": "Skill",
+                    "spCost": 4,
+                    "sfxFilename": "sfx_charity_shot.mp3",
+                    "targetingParams": {
+                        "selection": {
+                            "targetableTypes": ["Enemy"],
+                            "pattern": {
+                                "shape": "SpecificPositions",
+                                "positions": [3],
+                                "direction": "Forward",
+                                "circular": true
+                            }
+                        },
+                        "area": {
+                            "origin": "SelectedTarget",
+                            "shape": "SingleOnSelected",
+                            "affectedTypes": ["Enemy"]
+                        }
+                    },
+                    "effects": [
+                        {
+                            "type": "damage",
+                            "multiplier": 2.0,
+                            "target": "selected"
+                        },
+                        {
+                            "type": "heal_lowest_hp_ally",
+                            "multiplier": 2.0,
+                            "basedOn": "caster_atk"
+                        }
+                    ]
+                },
+                {
+                    "commandId": "rh_eagle_eye",
+                    "name": "Eagle Eye (7)",
+                    "description": "Long-range attack (4x ATK).",
+                    "type": "Skill",
+                    "spCost": 7,
+                    "sfxFilename": "sfx_eagle_eye.mp3",
+                    "targetingParams": {
+                        "selection": {
+                            "targetableTypes": ["Enemy"],
+                            "pattern": {
+                                "shape": "SpecificPositions",
+                                "positions": [5],
+                                "direction": "Forward",
+                                "circular": true
+                            }
+                        },
+                        "area": {
+                            "origin": "SelectedTarget",
+                            "shape": "SingleOnSelected",
+                            "affectedTypes": ["Enemy"]
+                        }
+                    },
+                    "effects": [
+                        {
+                            "type": "damage",
+                            "multiplier": 4.0,
+                            "target": "selected"
+                        }
+                    ]
+                },
+                {
+                    "commandId": "rh_poison_shot_test",
+                    "name": "Poison Shot (TEST)",
+                    "description": "Deals minor damage and applies Poison for 2 turns.",
+                    "type": "Skill",
+                    "spCost": 3,
+                    "sfxFilename": "sfx_poison_effect.mp3",
+                    "targetingParams": {
+                        "selection": { "targetableTypes": ["Enemy"], "pattern": { "shape": "WithinDistance", "distance": 2 }},
+                        "area": { "origin": "SelectedTarget", "shape": "SingleOnSelected" }
+                    },
+                    "effects": [
+                        {
+                            "type": "damage",
+                            "multiplier": 0.5,
+                            "target": "selected"
+                        },
+                        {
+                            "type": "status",
+                            "statusName": "Poison",
+                            "chance": 1.0,
+                            "duration": 2,
+                            "target": "selected",
+                            "effectDetails": { 
+                                "damage": 5, 
+                                "trigger_phase": "end_of_turn"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "enemy_minion_melee_01_mock",
+            "name": "Goblin Grunt",
+            "type": "Enemy",
+            "role": "Melee",
+            "tier": "Minion",
+            "expValue": 1,
+            "status": "Idle",
+            "pseudoPos": 3,
+            "portraitFilename": "enemies/Goblin_Grunt_Portrait.png",
+            "fullBodyFilename": "enemies/Goblin_Grunt_Full.png",
+            "stats": {
+                "level": 1,
+                "hp": 22,
+                "maxHp": 22,
+                "atk": 10,
+                "def": 2
+            },
+            "commands": []
+        },
+        {
+            "id": "enemy_minion_ranged_01_mock",
+            "name": "Kobold Scout",
+            "type": "Enemy",
+            "role": "Ranged",
+            "tier": "Minion",
+            "expValue": 1,
+            "status": "Idle",
+            "pseudoPos": 4,
+            "portraitFilename": "enemies/Kobold_Scout_Portrait.png",
+            "fullBodyFilename": "enemies/Kobold_Scout_Full.png",
+            "stats": {
+                "level": 1,
+                "hp": 20,
+                "maxHp": 20,
+                "atk": 9,
+                "def": 1
+            },
+            "commands": []
+        },
+        {
+            "id": "enemy_minion_ranged_02_mock",
+            "name": "Forest Sprite",
+            "type": "Enemy",
+            "role": "Ranged",
+            "tier": "Minion",
+            "expValue": 1,
+            "status": "Idle",
+            "pseudoPos": 5,
+            "portraitFilename": "enemies/Forest_Sprite_Portrait.png",
+            "fullBodyFilename": "enemies/Forest_Sprite_Full.png",
+            "stats": {
+                "level": 1,
+                "hp": 18,
+                "maxHp": 18,
+                "atk": 9,
+                "def": 0
+            },
+            "commands": []
+        },
+        {
+            "id": "enemy_elite_melee_01_mock",
+            "name": "Orc Pillager",
+            "type": "Enemy",
+            "role": "Melee",
+            "tier": "Elite",
+            "expValue": 3,
+            "status": "Idle",
+            "pseudoPos": 6,
+            "portraitFilename": "enemies/Orc_Pillager_Portrait.png",
+            "fullBodyFilename": "enemies/Orc_Pillager_Full.png",
+            "stats": {
+                "level": 2,
+                "hp": 40,
+                "maxHp": 40,
+                "atk": 15,
+                "def": 4
+            },
+            "commands": []
+        },
+        {
+            "id": "enemy_elite_ranged_01_mock",
+            "name": "Dark Elf Hunter",
+            "type": "Enemy",
+            "role": "Ranged",
+            "tier": "Elite",
+            "expValue": 3,
+            "status": "Idle",
+            "pseudoPos": 7,
+            "portraitFilename": "enemies/Dark_Elf_Hunter_Portrait.png",
+            "fullBodyFilename": "enemies/Dark_Elf_Hunter_Full.png",
+            "stats": {
+                "level": 2,
+                "hp": 38,
+                "maxHp": 38,
+                "atk": 14,
+                "def": 3
+            },
+            "commands": []
+        },
+        {
+            "id": "enemy_boss_melee_01_mock",
+            "name": "Troll Chieftain",
+            "type": "Enemy",
+            "role": "Melee",
+            "tier": "Boss",
+            "expValue": 6,
+            "status": "Idle",
+            "pseudoPos": 8,
+            "portraitFilename": "enemies/Troll_Chieftain_Portrait.png",
+            "fullBodyFilename": "enemies/Troll_Chieftain_Full.png",
+            "stats": {
+                "level": 3,
+                "hp": 80,
+                "maxHp": 80,
+                "atk": 30,
+                "def": 5
+            },
+            "commands": []
+        }
+    ],
+    "totalUnits": 9,
+    "lastActionDetails": null
+}
